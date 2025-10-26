@@ -1,0 +1,211 @@
+[
+    {
+        "id": "1e9d41238d0d4bc7",
+        "type": "tab",
+        "label": "Aufgabe 4.1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "9887b9fa0150b180",
+        "type": "telegram command",
+        "z": "1e9d41238d0d4bc7",
+        "name": "startUpdates",
+        "command": "/startUpdates",
+        "description": "",
+        "registercommand": false,
+        "language": "",
+        "scope": "default",
+        "bot": "d1c4601203cd578f",
+        "strict": false,
+        "hasresponse": true,
+        "useregex": false,
+        "removeregexcommand": false,
+        "outputs": 2,
+        "x": 370,
+        "y": 280,
+        "wires": [
+            [
+                "a42a0efb121ecc27"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "a42a0efb121ecc27",
+        "type": "function",
+        "z": "1e9d41238d0d4bc7",
+        "name": "add subscriber",
+        "func": "let subscribers = flow.get(\"subscribers\") || [];\n\nconst currentChatId = msg.payload.chatId;\n\n// Nur hinzufügen, wenn noch nicht drin\nif (!subscribers.includes(currentChatId)) {\n    subscribers.push(currentChatId);\n}\n\nflow.set(\"subscribers\", subscribers);\n// !! kein return msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 580,
+        "y": 280,
+        "wires": [
+            [
+                "a276ea26abf8f678"
+            ]
+        ]
+    },
+    {
+        "id": "9eabe2a8bff78488",
+        "type": "function",
+        "z": "1e9d41238d0d4bc7",
+        "name": "remove subscriber",
+        "func": "let subscribers = flow.get(\"subscribers\") || [];\nconst currentChatId = msg.payload.chatId;\n\n// Chat-ID aus Liste filtern (löscht sie, falls vorhanden)\nsubscribers = subscribers.filter(id => id !== currentChatId);\n\nflow.set(\"subscribers\", subscribers);\n\n// !! kein return msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 590,
+        "y": 340,
+        "wires": [
+            [
+                "a276ea26abf8f678"
+            ]
+        ]
+    },
+    {
+        "id": "51e8039d513f3d7f",
+        "type": "telegram command",
+        "z": "1e9d41238d0d4bc7",
+        "name": "stopUpdates",
+        "command": "/stopUpdates",
+        "description": "",
+        "registercommand": false,
+        "language": "",
+        "scope": "default",
+        "bot": "d1c4601203cd578f",
+        "strict": false,
+        "hasresponse": true,
+        "useregex": false,
+        "removeregexcommand": false,
+        "outputs": 2,
+        "x": 370,
+        "y": 340,
+        "wires": [
+            [
+                "9eabe2a8bff78488"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "a276ea26abf8f678",
+        "type": "function",
+        "z": "1e9d41238d0d4bc7",
+        "name": "show subscribers",
+        "func": "const subscribers = flow.get(\"subscribers\") || [];\nconst messageContent = \"subscribed ChatIds: \" + subscribers;\n\nconst telegramMessage = {\n    chatId: subscribers,\n    type: \"message\",\n    content: messageContent\n};\n\nmsg.payload = telegramMessage\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 850,
+        "y": 300,
+        "wires": [
+            [
+                "c2256cf3b793ecb6",
+                "5bd9c9c8e089e9f8"
+            ]
+        ]
+    },
+    {
+        "id": "7aacccbf256e4cd2",
+        "type": "inject",
+        "z": "1e9d41238d0d4bc7",
+        "name": "init",
+        "props": [
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 630,
+        "y": 180,
+        "wires": [
+            [
+                "a276ea26abf8f678"
+            ]
+        ]
+    },
+    {
+        "id": "c2256cf3b793ecb6",
+        "type": "telegram sender",
+        "z": "1e9d41238d0d4bc7",
+        "name": "",
+        "bot": "d1c4601203cd578f",
+        "haserroroutput": false,
+        "outputs": 1,
+        "x": 1120,
+        "y": 300,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "5bd9c9c8e089e9f8",
+        "type": "debug",
+        "z": "1e9d41238d0d4bc7",
+        "name": "show subscribers",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1130,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "d1c4601203cd578f",
+        "type": "telegram bot",
+        "botname": "iot_unique_username_bot",
+        "usernames": "",
+        "chatids": "",
+        "baseapiurl": "",
+        "testenvironment": false,
+        "updatemode": "polling",
+        "pollinterval": 300,
+        "usesocks": false,
+        "sockshost": "",
+        "socksprotocol": "socks5",
+        "socksport": 6667,
+        "socksusername": "anonymous",
+        "sockspassword": "",
+        "bothost": "",
+        "botpath": "",
+        "localbothost": "0.0.0.0",
+        "localbotport": 8443,
+        "publicbotport": 8443,
+        "privatekey": "",
+        "certificate": "",
+        "useselfsignedcertificate": false,
+        "sslterminated": false,
+        "verboselogging": false
+    },
+    {
+        "id": "5ff436849399f803",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "node-red-contrib-telegrambot": "16.3.3"
+        }
+    }
+]

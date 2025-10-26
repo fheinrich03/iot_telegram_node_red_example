@@ -1,0 +1,269 @@
+[
+    {
+        "id": "835860df6dfb8100",
+        "type": "tab",
+        "label": "Weather Updates",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "aed4212c0b4ba68d",
+        "type": "telegram sender",
+        "z": "835860df6dfb8100",
+        "name": "",
+        "bot": "d1c4601203cd578f",
+        "haserroroutput": false,
+        "outputs": 1,
+        "x": 1060,
+        "y": 300,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "47b08c96becb63fb",
+        "type": "debug",
+        "z": "835860df6dfb8100",
+        "name": "debug: telegram message",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1090,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "b4b8fe64d7f1c9a9",
+        "type": "inject",
+        "z": "835860df6dfb8100",
+        "name": "",
+        "props": [
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "5",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 250,
+        "y": 160,
+        "wires": [
+            [
+                "11818ccb463a023d"
+            ]
+        ]
+    },
+    {
+        "id": "861ed4c22f5b5f5a",
+        "type": "telegram command",
+        "z": "835860df6dfb8100",
+        "name": "startUpdates",
+        "command": "/startUpdates",
+        "description": "",
+        "registercommand": false,
+        "language": "",
+        "scope": "default",
+        "bot": "d1c4601203cd578f",
+        "strict": false,
+        "hasresponse": true,
+        "useregex": false,
+        "removeregexcommand": false,
+        "outputs": 2,
+        "x": 250,
+        "y": 360,
+        "wires": [
+            [
+                "5862431e6ded4157"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "5862431e6ded4157",
+        "type": "function",
+        "z": "835860df6dfb8100",
+        "name": "add subscriber",
+        "func": "let subscribers = flow.get(\"subscribers\") || [];\n\nconst currentChatId = msg.payload.chatId;\n\n// Nur hinzufügen, wenn noch nicht drin\nif (!subscribers.includes(currentChatId)) {\n    subscribers.push(currentChatId);\n}\n\nflow.set(\"subscribers\", subscribers);\n// !! kein return msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 460,
+        "y": 360,
+        "wires": [
+            [
+                "61b4e8a3ce4fe533"
+            ]
+        ]
+    },
+    {
+        "id": "2f5d1352b52230db",
+        "type": "function",
+        "z": "835860df6dfb8100",
+        "name": "remove subscriber",
+        "func": "let subscribers = flow.get(\"subscribers\") || [];\nconst currentChatId = msg.payload.chatId;\n\n// Chat-ID aus Liste filtern (löscht sie, falls vorhanden)\nsubscribers = subscribers.filter(id => id !== currentChatId);\n\nflow.set(\"subscribers\", subscribers);\n\n// !! kein return msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 470,
+        "y": 300,
+        "wires": [
+            [
+                "61b4e8a3ce4fe533"
+            ]
+        ]
+    },
+    {
+        "id": "a67409310a9baf62",
+        "type": "telegram command",
+        "z": "835860df6dfb8100",
+        "name": "stopUpdates",
+        "command": "/stopUpdates",
+        "description": "",
+        "registercommand": false,
+        "language": "",
+        "scope": "default",
+        "bot": "d1c4601203cd578f",
+        "strict": false,
+        "hasresponse": true,
+        "useregex": false,
+        "removeregexcommand": false,
+        "outputs": 2,
+        "x": 250,
+        "y": 300,
+        "wires": [
+            [
+                "2f5d1352b52230db"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "61b4e8a3ce4fe533",
+        "type": "function",
+        "z": "835860df6dfb8100",
+        "name": "create telegram message",
+        "func": "const subscribers = flow.get(\"subscribers\") || [];\nconst weather = msg.payload.current_weather;\n\nif (!weather) {\n    node.warn(\"Keine Wetterdaten gefunden\");\n    return null;\n}\n\n// Schönen Text für Telegram zusammenbauen\nconst messageText =\n    `🌤️ Wetter-Update für Berlin\\n\\n` +\n    `🌡️ Temperatur: ${weather.temperature} °C\\n` +\n    `💨 Wind: ${weather.windspeed} km/h aus ${weather.winddirection}°\\n` +\n    `🕒 Zeit: ${weather.time.replace('T', ' ')}`;\n\n\nconst telegramMessage = {\n    chatId: subscribers,\n    type: \"message\",\n    content: messageText\n};\n\nmsg.payload = telegramMessage\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 790,
+        "y": 280,
+        "wires": [
+            [
+                "aed4212c0b4ba68d",
+                "47b08c96becb63fb"
+            ]
+        ]
+    },
+    {
+        "id": "11818ccb463a023d",
+        "type": "http request",
+        "z": "835860df6dfb8100",
+        "name": "",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&current_weather=true",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 410,
+        "y": 160,
+        "wires": [
+            [
+                "3cf557b7bb29216a"
+            ]
+        ]
+    },
+    {
+        "id": "3cf557b7bb29216a",
+        "type": "json",
+        "z": "835860df6dfb8100",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 570,
+        "y": 160,
+        "wires": [
+            [
+                "61b4e8a3ce4fe533",
+                "c59dcb07d85adacc"
+            ]
+        ]
+    },
+    {
+        "id": "c59dcb07d85adacc",
+        "type": "debug",
+        "z": "835860df6dfb8100",
+        "name": "debug: api response",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 840,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "d1c4601203cd578f",
+        "type": "telegram bot",
+        "botname": "iot_unique_username_bot",
+        "usernames": "",
+        "chatids": "",
+        "baseapiurl": "",
+        "testenvironment": false,
+        "updatemode": "polling",
+        "pollinterval": 300,
+        "usesocks": false,
+        "sockshost": "",
+        "socksprotocol": "socks5",
+        "socksport": 6667,
+        "socksusername": "anonymous",
+        "sockspassword": "",
+        "bothost": "",
+        "botpath": "",
+        "localbothost": "0.0.0.0",
+        "localbotport": 8443,
+        "publicbotport": 8443,
+        "privatekey": "",
+        "certificate": "",
+        "useselfsignedcertificate": false,
+        "sslterminated": false,
+        "verboselogging": false
+    },
+    {
+        "id": "041a437092c8689b",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "node-red-contrib-telegrambot": "16.3.3"
+        }
+    }
+]

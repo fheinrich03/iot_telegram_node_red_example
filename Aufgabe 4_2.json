@@ -1,0 +1,91 @@
+[
+    {
+        "id": "9c05ff59428e235b",
+        "type": "tab",
+        "label": "Aufgabe 4.2",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "8ba97d96a398061e",
+        "type": "inject",
+        "z": "9c05ff59428e235b",
+        "name": "",
+        "props": [
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 410,
+        "y": 260,
+        "wires": [
+            [
+                "e7711b15c87aa5f2"
+            ]
+        ]
+    },
+    {
+        "id": "e7711b15c87aa5f2",
+        "type": "http request",
+        "z": "9c05ff59428e235b",
+        "name": "",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&current_weather=true",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 570,
+        "y": 260,
+        "wires": [
+            [
+                "ba6a25b4790f1e70"
+            ]
+        ]
+    },
+    {
+        "id": "ba6a25b4790f1e70",
+        "type": "json",
+        "z": "9c05ff59428e235b",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 730,
+        "y": 260,
+        "wires": [
+            [
+                "8c9ef68557e7189c"
+            ]
+        ]
+    },
+    {
+        "id": "8c9ef68557e7189c",
+        "type": "debug",
+        "z": "9c05ff59428e235b",
+        "name": "debug: api response",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1000,
+        "y": 260,
+        "wires": []
+    }
+]
