@@ -1,5 +1,10 @@
 # Telegram Bot API Workshop
 
+## Hinweise
+
+- Die Lösungen sind im [Repository](https://github.com/fheinrich03/iot_telegram_node_red_example) hinterlegt
+- Die Aufgaben bauen aufeinander auf, das heißt die Lösungen können für die Folgeaufgaben weiterverwendet werden
+
 ## Voraussetzungen
 
 - Node-RED
@@ -7,7 +12,7 @@
 - Normaler Telegram-Account
 - Telegram Nodes Palette: `node-red-contrib-telegrambot`
 
----
+
 
 ## Aufgabe 1: Telegram Bot erstellen
 
@@ -17,8 +22,6 @@
 4. Wähle einen **Anzeigenamen** und einen **einmaligen** `bot_username`  
    (Der `bot_username` muss mit "bot" enden)
 5. Speichere das ausgegebene **Token** für die folgenden Aufgaben
-
----
 
 ## Aufgabe 2: Bot API testen
 
@@ -39,7 +42,7 @@
 
 ## Aufgabe 3: Einfache Telegram-Nachricht senden
 
-![example](Pasted%20image%2020251026104649.png)
+![Beispiel Flow](./images/3_telegram_sender.png)
 
 ### Nodes
 
@@ -80,7 +83,7 @@
 
 ## Aufgabe 4: Wetter-Updates
 
-![example](weather_updates_example.png)
+![Beispiel Flow](./images/4_weather_updates.png)
 
 Der Bot besteht aus 3 Teilen:
 
@@ -94,7 +97,7 @@ Wir bauen den Bot in 3 Schritten auf.
 
 ### 4.1 Subscribe Handler
 
-![example](Pasted%20image%2020251026113414.png)
+![Beispiel Flow](./images/4_1_subscribe_handler.png)
 
 **Ziel:**
 
@@ -179,7 +182,7 @@ Statt Wetterdaten zu beziehen, verwenden wir zunächst einen **Inject Node**, um
 
 ### 4.2 Wetter-Updates via HTTP
 
-![example](Pasted%20image%2020251026124859.png)
+![Beispiel Flow](./images/4_2_http.png)
 
 **Ziel:**
 
@@ -208,13 +211,13 @@ Statt Wetterdaten zu beziehen, verwenden wir zunächst einen **Inject Node**, um
 ### 4.3 Subflows verbinden und Wetter-Nachricht verfassen
 
 **Ergebnis aus Aufgabe 4.2:**  
-![example](Pasted%20image%2020251026124859.png)
+![Beispiel Flow](./images/4_2_http.png)
 
 **Ergebnis aus Aufgabe 4.1:**  
-![example](Pasted%20image%2020251026113414.png)
+![Beispiel Flow](./images/4_1_subscribe_handler.png)
 
 **Ziel-Bot-System:**  
-![example](weather_updates_example.png)
+![example](./images/4_weather_updates.png)
 
 **Ziel:**  
 Anstatt nur `subscribed ChatIds` zu senden, sollen relevante Wetterdaten gesendet werden.
