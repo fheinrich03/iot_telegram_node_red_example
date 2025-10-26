@@ -2,17 +2,20 @@
 
 ## Hinweise
 
-- Die Lösungen sind im [Repository](https://github.com/fheinrich03/iot_telegram_node_red_example) hinterlegt
-- Die Aufgaben bauen aufeinander auf, das heißt die Lösungen können für die Folgeaufgaben weiterverwendet werden
+- Die Lösungen der Aufgaben sind im [Repository](https://github.com/fheinrich03/iot_telegram_node_red_example) hinterlegt
+	- die Flows können als Json Date importiert werden unter:
+	- Menu -> Import -> Flow Json einfügen
+- Da die Aufgaben aufeinander aufbauen, können die Lösungen für die Folgeaufgaben weiterverwendet werden
 
 ## Voraussetzungen
 
 - Node-RED
 - Telegram App auf Handy oder Laptop installiert
 - Normaler Telegram-Account
-- Telegram Nodes Palette: `node-red-contrib-telegrambot`
-
-
+- Telegram Nodes installiert: [node-red-contrib-telegrambot](https://flows.nodered.org/node/node-red-contrib-telegrambot)
+	- Menu -> Palette verwalten -> Nodes installieren: `node-red-contrib-telegrambot`
+	
+---
 
 ## Aufgabe 1: Telegram Bot erstellen
 
