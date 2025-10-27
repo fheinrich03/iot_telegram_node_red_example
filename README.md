@@ -29,7 +29,8 @@
 ## Aufgabe 2: Bot API testen
 
 1. Öffne die Telegram App (auf Handy oder Laptop)
-2. Suche deinen Bot über deinen `<bot_username>` und starte einen Chat
+2. Suche deinen Bot über deinen `<bot_username>` und starte einen Chat mit `/start`
+3. Wichtig: Verfasse mindestens eine Nachricht z.b. "Hallo Bot"
 3. Öffne den Browser und gib in die URL-Leiste ein:
 
    ```text
@@ -38,7 +39,7 @@
 
    Ersetze `<token>` mit deinem **Token**.
 
-4. Die Ausgabe sollte unter anderem `"ok": true` und eine `chatId` enthalten
+4. Die Ausgabe sollte unter anderem `"ok": true`, deine verfasste Nachricht und eine `chatId` enthalten
 5. Speichere die `chatId` für später
 
 ---
@@ -65,6 +66,8 @@
   msg.payload = telegramMessage;
   return msg;
   ```
+  > WICHTIG: Ersetze die `chatId` mit der chatId aus der vorherigen Aufgabe. </br>
+  > Tipp: Falls du deine chatId nicht weißt, verknüpfe einen `Receiver Node (Output 1)` und `Debug Node` und sende eine Nachricht an deinen Bot
 
 - _Optional:_ Debug Node
 
